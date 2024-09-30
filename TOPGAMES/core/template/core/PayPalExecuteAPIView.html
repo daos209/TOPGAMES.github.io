@@ -1,0 +1,31 @@
+# core/views.py
+
+from rest_framework.views import APIView
+from django.http import JsonResponse
+import paypalrestsdk
+from django.shortcuts import render
+
+class PayPalExecuteAPIView(APIView):
+    def post(self, request, *args, **kwargs):
+        # Obtener el paymentID y payerID desde la solicitud POST
+        payment_id = request.data.get("paymentID")
+        payer_id = request.data.get("payerID")
+
+        # Buscar el pago en PayPal utilizando el payment_id
+        payment = paypalrestsdk.Payment.find(payment_id)
+
+        if payment:
+            # Ejecutar el pago utilizando el payer_id
+            if payment.execute({"payer_id": payer_id}):
+                # Si el pago es exitoso
+                return JsonResponse({"message": "Pago completado con éxito"}, status=200)
+            else:
+                # Si ocurre algún error en la ejecución del pago
+                return JsonResponse({"error": payment.error}, status=400)
+        else:
+            # Si el pago no es encontrado
+            return JsonResponse({"error": "Pago no encontrado"}, status=404)
+
+# Vista para mostrar el mensaje en caso de éxito o error
+def pago_exitoso(request):
+    return render(request, 'core/pago_exitoso.html')

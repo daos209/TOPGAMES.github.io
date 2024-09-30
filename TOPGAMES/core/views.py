@@ -1,59 +1,67 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login as auth_login, update_session_auth_hash
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-
 # core/views.py
-from rest_framework.response import Response
+import paypalrestsdk
+from django.conf import settings
+from django.http import JsonResponse
 from rest_framework.views import APIView
+from rest_framework.response import Response
 from rest_framework import status
-from .serializers import PagoSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.permissions import IsAuthenticated
 
-class PagoAPIView(APIView):
+class PayPalExecuteAPIView(APIView):
+    permission_classes = [IsAuthenticated]  # Solo usuarios autenticados pueden acceder a esta vista
+
     def post(self, request, *args, **kwargs):
-        serializer = PagoSerializer(data=request.data)
-        if serializer.is_valid():
-            # Aquí se puede añadir la lógica para procesar el pago, como la integración con un gateway de pagos
-            # Por ejemplo, podrías enviar los detalles a una API de pagos como Stripe, PayPal, etc.
-            return Response({'mensaje': 'Pago procesado correctamente.'}, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        payment_id = request.data.get("paymentID")
+        payer_id = request.data.get("payerID")
 
+        payment = paypalrestsdk.Payment.find(payment_id)
 
-
-def index(request):
-    return render(request, 'core/index.html')
-
-def login(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            auth_login(request, user)
-            return redirect('index')
+        if payment:
+            if payment.execute({"payer_id": payer_id}):
+                return JsonResponse({"message": "Pago completado con éxito"}, status=200)
+            else:
+                return JsonResponse({"error": payment.error}, status=400)
         else:
-            messages.error(request, 'Nombre de usuario o contraseña incorrectos')
-    return render(request, 'core/login.html')
+            return JsonResponse({"error": "Pago no encontrado"}, status=404)
+# No es necesario agregar código adicional, simplemente importa la vista
+class CustomTokenObtainPairView(TokenObtainPairView):
+    # Aquí puedes personalizar la respuesta si es necesario
+    pass
 
-def carrito(request):
-    return render(request, 'core/carrito.html')
+# Configura PayPal
+paypalrestsdk.configure({
+    "mode": settings.PAYPAL_MODE,  # 'sandbox' o 'live'
+    "client_id": settings.PAYPAL_CLIENT_ID,
+    "client_secret": settings.PAYPAL_CLIENT_SECRET
+})
 
-@login_required
-def modificar_perfil(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST.get('password')
-        confirm_password = request.POST.get('confirmPassword')
+class PayPalPaymentAPIView(APIView):
+    def post(self, request, *args, **kwargs):
+        # Obtener el monto del pago del request (se puede personalizar según lo que envíe el frontend)
+        amount = request.data.get("amount", "20.00")  # Valor predeterminado si no se proporciona
 
-        user = request.user
-        user.username = username
+        payment = paypalrestsdk.Payment({
+            "intent": "sale",
+            "payer": {
+                "payment_method": "paypal"
+            },
+            "redirect_urls": {
+                "return_url": "http://localhost:8000/api/paypal/execute/",  # Cambiar en producción
+                "cancel_url": "http://localhost:8000/cancel/"  # Cambiar en producción
+            },
+            "transactions": [{
+                "amount": {
+                    "total": amount,
+                    "currency": "USD"
+                },
+                "description": "Compra en TopGames"
+            }]
+        })
 
-        if password and password == confirm_password:
-            user.set_password(password)
-            update_session_auth_hash(request, user) 
-
-        user.save()
-        messages.success(request, 'Perfil actualizado exitosamente.')
-        return redirect('modificar_perfil')
-
-    return render(request, 'core/moduser.html', {'user': request.user})
+        if payment.create():
+            for link in payment.links:
+                if link.rel == "approval_url":
+                    return JsonResponse({"approval_url": link.href})
+        else:
+            return JsonResponse({"error": payment.error}, status=400)

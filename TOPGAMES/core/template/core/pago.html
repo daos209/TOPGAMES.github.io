@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagar con PayPal</title>
+    <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&currency=USD"></script> <!-- Reemplaza con tu ID de cliente de PayPal -->
+</head>
+<body>
+    <h1>Pagar con PayPal</h1>
+
+    <div id="paypal-button-container"></div>
+
+    <script>
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: '20.00' // Monto de la compra
+                        }
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    alert('Pago aprobado por ' + details.payer.name.given_name);
+
+                    // Enviar el paymentID y payerID al backend
+                    fetch('/api/paypal/execute/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            paymentID: data.paymentID,
+                            payerID: data.payerID
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.message) {
+                            // Redirigir a la página de éxito si el pago se completa
+                            window.location.href = '/pago-exitoso/';
+                        } else {
+                            // Manejar errores de ejecución
+                            alert(data.error);
+                        }
+                    });
+                });
+            },
+            onCancel: function (data) {
+                // Acción en caso de que el usuario cancele el pago
+                alert('Pago cancelado');
+            },
+            onError: function (err) {
+                // Acción en caso de error
+                alert('Error en el proceso de pago: ' + err);
+            }
+        }).render('#paypal-button-container'); // Renderizar el botón de PayPal
+    </script>
+</body>
+</html>
