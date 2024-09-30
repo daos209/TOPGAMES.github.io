@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supervivencia - TOPGAMES</title>
+    <link rel="stylesheet" href="{% static 'core/css/styles.css'%}">
+</head>
+<body>
+    <header>
+        <h1>TOPGAMES - Supervivencia</h1>
+        <nav>
+            <a href="{% templates 'core/index.html'%}">Inicio</a>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="game-list">
+            <article class="game-item">
+                <img src="{% static 'core/Imagenes/ProjectZomboid.jpg'%}" alt="Project Zomboid">
+                <h3>Project Zomboid</h3>
+                <p>Project Zomboid es un juego de supervivencia, ambientado en un apocalipsis zombie. En este mundo abierto, deberás recolectar suministros, construir defensas, y sobre todo, sobrevivir. La muerte es inevitable, pero ¿cuánto tiempo podrás resistir?</p>
+                <p class="price">Precio: $19.000</p>
+                <button class="btn btn-primary add-to-cart-btn" data-id="1">Añadir al carrito</button>
+            </article>
+            <article class="game-item">
+                <img src="{% static 'core/Imagenes/Minecraft.jpg'%}" alt="Minecraft">
+                <h3>Minecraft</h3>
+                <p>Explora mundos infinitos, recolecta recursos y crea estructuras impresionantes. Juega solo o con amigos y deja volar tu imaginación en este universo de bloques.</p>
+                <p class="price">Precio: $26.000</p>
+                <button class="btn btn-primary add-to-cart-btn" data-id="2">Añadir al carrito</button>
+            </article>
+        </section>
+    </main>
+</body>
+</html>

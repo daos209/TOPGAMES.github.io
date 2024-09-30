@@ -1,0 +1,17 @@
+<form id="modificarClienteForm" method="POST" action="{% url 'modificar_perfil' %}">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="nombreUsuario" class="form-label">Nombre de Usuario</label>
+        <input type="text" class="form-control" id="nombreUsuario" name="username" value="{{ user.username }}" required>
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label">Nueva Contraseña (Opcional)</label>
+        <input type="password" class="form-control" id="password" name="password">
+    </div>
+    <div class="mb-3">
+        <label for="confirmPassword" class="form-label">Confirmar Nueva Contraseña</label>
+        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword">
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+    <button type="reset" class="btn btn-secondary">Limpiar</button>
+</form>

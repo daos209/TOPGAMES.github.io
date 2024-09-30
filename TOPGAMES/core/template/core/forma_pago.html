@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forma de Pago - TopGames</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <!-- Puedes añadir Bootstrap si prefieres usarlo -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mt-5">Selecciona tu Forma de Pago</h1>
+
+        <form action="{% url 'procesar_pago' %}" method="POST" class="mt-4">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="nombre">Nombre del titular</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre del titular de la tarjeta" required>
+            </div>
+
+            <div class="form-group">
+                <label for="metodo_pago">Método de Pago</label>
+                <select class="form-control" id="metodo_pago" name="metodo_pago" required>
+                    <option value="tarjeta">Tarjeta de Crédito/Débito</option>
+                    <option value="paypal">PayPal</option>
+                    <option value="transferencia">Transferencia Bancaria</option>
+                </select>
+            </div>
+
+            <!-- Sección para tarjeta de crédito -->
+            <div id="tarjeta_section" class="d-none">
+                <div class="form-group">
+                    <label for="numero_tarjeta">Número de Tarjeta</label>
+                    <input type="text" class="form-control" id="numero_tarjeta" name="numero_tarjeta" placeholder="1234 5678 9012 3456">
+                </div>
+                <div class="form-group">
+                    <label for="fecha_expiracion">Fecha de Expiración</label>
+                    <input type="text" class="form-control" id="fecha_expiracion" name="fecha_expiracion" placeholder="MM/AA">
+                </div>
+                <div class="form-group">
+                    <label for="cvv">CVV</label>
+                    <input type="text" class="form-control" id="cvv" name="cvv" placeholder="123">
+                </div>
+            </div>
+
+            <!-- Botón para enviar el formulario -->
+            <button type="submit" class="btn btn-primary btn-block">Realizar Pago</button>
+        </form>
+
+        <div class="mt-5 text-center">
+            <a href="{% url 'carrito' %}" class="btn btn-secondary">Volver al Carrito</a>
+        </div>
+    </div>
+
+    <!-- Añadir un poco de JavaScript para mostrar campos según el método de pago -->
+    <script>
+        const metodoPago = document.getElementById('metodo_pago');
+        const tarjetaSection = document.getElementById('tarjeta_section');
+
+        metodoPago.addEventListener('change', function() {
+            if (metodoPago.value === 'tarjeta') {
+                tarjetaSection.classList.remove('d-none');
+            } else {
+                tarjetaSection.classList.add('d-none');
+            }
+        });
+    </script>
+</body>
+</html>

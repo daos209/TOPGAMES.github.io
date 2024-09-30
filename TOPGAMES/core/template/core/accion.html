@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acción - TOPGAMES</title>
+    <link rel="stylesheet" href="{% static 'core/css/styles.css'%}">
+</head>
+<body>
+    <header>
+        <h1>TOPGAMES - Acción</h1>
+        <nav>
+            <a href="{% url 'index' %}">Inicio</a>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="game-list">
+            <article class="game-item">
+                <img src="{% static 'core/Imagenes/GTA5.jpg'%}" alt="GTA V">
+                <h3>GTA V</h3>
+                <p>Bienvenido a Los Santos, juega como tres personajes únicos: un joven estafador, un veterano ladrón de bancos y un impredecible psicópata, mientras realizan peligrosos atracos en busca de fortuna y poder. Con una narrativa envolvente, un vasto mapa interactivo y un modo multijugador online expansivo, GTA V ofrece una experiencia de juego inolvidable.</p>
+                <p class="price">Precio: $20.000</p>
+                <button class="btn btn-primary add-to-cart-btn"
+                                data-id="1"
+                                data-nombre="Call of Duty: Modern Warfare III"
+                                data-imagen="Imagenes/Call of Duty: Modern Warfare III"
+                                data-precio="59.99">
+                                Agregar al carrito
+            </article>
+            <article class="game-item">
+                <img src="{% static 'core/Imagenes/COD MW3.jpg'%}" alt="Call of Duty: Modern Warfare III">
+                <h3>Call of Duty: Modern Warfare III</h3>
+                <p>El FPS que redefine la guerra, secuela del exitoso Call of Duty: Modern Warfare II, el Capitán Price se enfrenta a la amenaza definitiva. El criminal de guerra ultranacionalista Vladimir Makarov está extendiendo su control por todo el mundo.</p>
+                <p class="price">Precio: $59.000</p>
+                <button class="btn btn-primary add-to-cart-btn"
+                                data-id="1"
+                                data-nombre="Call of Duty: Modern Warfare III"
+                                data-imagen="Imagenes/Call of Duty: Modern Warfare III"
+                                data-precio="59.99">
+                                Agregar al carrito
+            </article>
+        </section>
+    </main>
+</body>
+</html>

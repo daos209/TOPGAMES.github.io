@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carreras - TOPGAMES</title>
+    <link rel="stylesheet" href="{% static 'core/css/styles.css'%}">
+</head>
+<body>
+    <header>
+        <h1>TOPGAMES - Carreras</h1>
+        <nav>
+            <a href="{% url 'index' %}">Inicio</a>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="game-list">
+            <article class="game-item">
+                <img src="{% static 'core/Imagenes/ForzaHorizon5.jpg'%} alt="Forza Horizon 5">
+                <h3>Forza Horizon 5</h3>
+                <p>Forza Horizon 5 lleva la emoción de las carreras al siguiente nivel con su mundo abierto ambientado en México. Disfruta de una variedad de vehículos, desde autos deportivos hasta camionetas, y participa en carreras espectaculares a través de paisajes impresionantes.</p>
+                <p class="price">Precio: $59.000</p>
+                <button class="btn btn-primary add-to-cart-btn" data-id="3">Añadir al carrito</button>
+            </article>
+            <article class="game-item">
+                <img src="{% static 'core/Imagenes/GranTurismo7.jpg'%}" alt="Gran Turismo 7">
+                <h3>Gran Turismo 7</h3>
+                <p>Gran Turismo 7 es la última entrega de la serie de simuladores de carreras. Experimenta una conducción hiperrealista con una gran cantidad de vehículos y circuitos.</p>
+                <p class="price">Precio: $60.000</p>
+                <button class="btn btn-primary add-to-cart-btn" data-id="4">Añadir al carrito</button>
+            </article>
+        </section>
+    </main>
+</body>
+</html>

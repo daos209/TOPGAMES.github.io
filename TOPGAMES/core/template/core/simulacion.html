@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulación - TOPGAMES</title>
+    <link rel="stylesheet" href="{% static 'core/css/styles.css'%}">
+</head>
+<body>
+    <header>
+        <h1>TOPGAMES - Simulación</h1>
+        <nav>
+            <a href="{% templates 'core/index.html'%}">Inicio</a>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="game-list">
+            <article class="game-item">
+                <img src="{% static 'core/Imagenes/MicrosoftFlightSimulator.jpg'%}" alt="Microsoft Flight Simulator">
+                <h3>Microsoft Flight Simulator</h3>
+                <p>Microsoft Flight Simulator ofrece una experiencia de vuelo realista, simulación avanzada del clima y la física. Explora el mundo desde el cielo con aviones realistas y una representación precisa de los lugares más icónicos del planeta.</p>
+                <p class="price">Precio: $55.000</p>
+                <button class="btn btn-primary add-to-cart-btn" data-id="5">Añadir al carrito</button>
+            </article>
+            <article class="game-item">
+                <img src="{% static 'core/Imagenes/AssetoCorsa.jpg'%}" alt="Assetto Corsa">
+                <h3>Assetto Corsa</h3>
+                <p>Assetto Corsa es un simulador de carreras de alto realismo, conocido por su atención al detalle en la física de los vehículos y el diseño de los circuitos. Disfruta de una experiencia de conducción auténtica con una amplia variedad de autos y pistas.</p>
+                <p class="price">Precio: $39.000</p>
+                <button class="btn btn-primary add-to-cart-btn" data-id="6">Añadir al carrito</button>
+            </article>
+        </section>
+    </main>
+</body>
+</html>
